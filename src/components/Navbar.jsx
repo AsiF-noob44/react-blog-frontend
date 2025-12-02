@@ -1,4 +1,5 @@
 import { Link, NavLink } from "react-router-dom";
+import { PenLine } from "lucide-react";
 const Navbar = () => {
   const navLinks = (
     <>
@@ -76,7 +77,16 @@ const Navbar = () => {
             {navLinks}
           </ul>
         </div>
-        <div className="text-xl font-semibold italic">My Blog</div>
+        <Link to="/" className="flex items-center gap-2 group">
+          <PenLine
+            size={28}
+            className="text-indigo-600 stroke-2 transition-colors duration-300 group-hover:text-indigo-700"
+            fill="none"
+          />
+          <span className="text-2xl font-bold tracking-tight bg-linear-to-r from-indigo-600 via-purple-600 to-blue-600 bg-clip-text text-transparent transition-all duration-300 group-hover:from-indigo-700 group-hover:via-purple-700 group-hover:to-blue-700 italic">
+            My Blog
+          </span>
+        </Link>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal gap-2 px-1">{navLinks}</ul>
