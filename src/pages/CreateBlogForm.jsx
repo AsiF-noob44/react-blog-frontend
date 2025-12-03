@@ -1,11 +1,40 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { TicketPlus } from "lucide-react";
+import toast from "react-hot-toast";
+import { createBlog } from "../api/blogAPI.js";
 
 const CreateBlogForm = () => {
-  const { register, handleSubmit } = useForm();
-  const onSubmit = (data) => {
-    console.log(data);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+
+  // Handle form submission
+  const onSubmit = async (data) => {
+    setIsLoading(true);
+    const toastId = toast.loading("Publishing your blog...");
+
+    try {
+      const response = await createBlog(data);
+      toast.success("Blog created successfully!", { id: toastId });
+      reset(); // Clear the form
+      console.log("Blog created successfully:", response);
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.error ||
+        "Failed to create blog. Please try again.";
+      toast.error(errorMessage, { id: toastId });
+      console.error("Error creating blog:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
+
   return (
     <div className="min-h-screen bg-linear-to-br from-indigo-50 via-white to-purple-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto">
@@ -31,8 +60,13 @@ const CreateBlogForm = () => {
                 type="text"
                 className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 outline-none transition-all duration-200 bg-gray-50 hover:bg-white"
                 placeholder="Your name..."
-                {...register("author")}
+                {...register("author", { required: "Author name is required" })}
               />
+              {errors.author && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.author.message}
+                </p>
+              )}
             </div>
 
             {/* Title Input */}
@@ -44,8 +78,13 @@ const CreateBlogForm = () => {
                 type="text"
                 className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 outline-none transition-all duration-200 bg-gray-50 hover:bg-white"
                 placeholder="Enter an engaging title..."
-                {...register("title")}
+                {...register("title", { required: "Title is required" })}
               />
+              {errors.title && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.title.message}
+                </p>
+              )}
             </div>
 
             {/* Content Textarea */}
@@ -57,17 +96,29 @@ const CreateBlogForm = () => {
                 className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 outline-none transition-all duration-200 bg-gray-50 hover:bg-white resize-none"
                 placeholder="Write your blog content here..."
                 rows="10"
-                {...register("content")}
+                {...register("content", {
+                  required: "Content is required",
+                  minLength: {
+                    value: 20,
+                    message: "Content must be at least 20 characters",
+                  },
+                })}
               />
+              {errors.content && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.content.message}
+                </p>
+              )}
             </div>
 
             {/* Submit Button */}
             <div className="flex justify-end">
               <button
                 type="submit"
-                className="btn btn-success flex-1 font-semibold"
+                disabled={isLoading}
+                className="btn btn-success flex-1 font-semibold disabled:opacity-80 disabled:cursor-not-allowed"
               >
-                Publish Blog
+                {isLoading ? "Publishing..." : "Publish Blog"}
               </button>
             </div>
           </form>
