@@ -1,9 +1,45 @@
-import { DiamondPlus } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { DiamondPlus, User, Calendar, Eye } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { getAllBlogs } from "../api/blogAPI.js";
 
 const Blogs = () => {
+  const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        setLoading(true);
+        const blogsData = await getAllBlogs();
+        setBlogs(blogsData.blogs);
+      } catch (error) {
+        toast.error(error.response?.data?.error || "Failed to fetch blogs");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBlogs();
+  }, []);
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
+
+  const truncateContent = (content, maxLength = 150) => {
+    if (content.length <= maxLength) return content;
+    return content.substring(0, maxLength) + "...";
+  };
+
   return (
-    <div className="min-h-screen bg-base-50 p-8">
+    <div className="bg-base-50 p-8">
       <div className="max-w-6xl mx-auto">
         {/* Header Section */}
         <div className="flex items-center justify-between mb-8">
@@ -21,16 +57,76 @@ const Blogs = () => {
           </Link>
         </div>
 
-        {/* Placeholder for blogs list */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Blog cards */}
-          <div className="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
-            <div className="card-body">
-              <h2 className="card-title">No blogs yet</h2>
-              <p>Start creating your first blog post!</p>
+        {/* Loading Spinner */}
+        {loading && (
+          <div className="flex justify-center items-center py-20">
+            <span className="loading loading-spinner loading-lg text-primary"></span>
+          </div>
+        )}
+
+        {/* If No Blogs */}
+        {!loading && blogs.length === 0 && (
+          <div className="card bg-base-100 shadow-md">
+            <div className="card-body text-center py-16">
+              <h2 className="card-title justify-center text-2xl mb-2">
+                No blogs yet
+              </h2>
+              <p className="text-base-content/70 mb-4">
+                Start creating your first blog post!
+              </p>
+              <Link to="/create-blog" className="btn btn-primary">
+                Create Your First Blog
+              </Link>
             </div>
           </div>
-        </div>
+        )}
+
+        {/* Blog Cards Grid */}
+        {!loading && blogs.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {blogs.map((blog) => (
+              <div
+                key={blog?._id}
+                className="card bg-base-100 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+              >
+                <div className="card-body">
+                  {/* Blog Title */}
+                  <h2 className="card-title text-xl mb-2 line-clamp-2">
+                    {blog?.title}
+                  </h2>
+
+                  {/* Author and Date */}
+                  <div className="flex flex-col gap-2 mb-3 text-sm text-base-content/70">
+                    <div className="flex items-center gap-2">
+                      <User size={16} />
+                      <span className="font-medium">{blog?.author}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Calendar size={16} />
+                      <span>{formatDate(blog?.createdAt)}</span>
+                    </div>
+                  </div>
+
+                  {/* Content Preview */}
+                  <p className="text-base-content/80 mb-4 line-clamp-3">
+                    {truncateContent(blog?.content)}
+                  </p>
+
+                  {/* View Details Button */}
+                  <div className="card-actions justify-end">
+                    <button
+                      onClick={() => navigate(`/blogs/${blog?._id}`)}
+                      className="btn btn-accent btn-sm gap-2"
+                    >
+                      <Eye size={16} />
+                      View Details
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

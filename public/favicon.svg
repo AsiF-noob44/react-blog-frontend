@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4F46E5;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#9333EA;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2563EB;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="50" cy="50" r="48" fill="url(#grad)"/>
+  
+  <!-- Blog icon simplified -->
+  <path d="M 30 35 L 30 65 L 50 65 C 58 65 65 58 65 50 C 65 42 58 35 50 35 L 30 35 Z M 38 43 L 50 43 C 53.5 43 57 46.5 57 50 C 57 53.5 53.5 57 50 57 L 38 57 L 38 43 Z" fill="white"/>
+  <circle cx="67" cy="57" r="5" fill="white"/>
+</svg>

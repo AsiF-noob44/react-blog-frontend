@@ -3,9 +3,11 @@ import { useForm } from "react-hook-form";
 import { TicketPlus } from "lucide-react";
 import toast from "react-hot-toast";
 import { createBlog } from "../api/blogAPI.js";
+import { useNavigate } from "react-router-dom";
 
 const CreateBlogForm = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const {
     register,
@@ -23,6 +25,7 @@ const CreateBlogForm = () => {
       const response = await createBlog(data);
       toast.success("Blog created successfully!", { id: toastId });
       reset(); // Clear the form
+      navigate("/blogs"); // Redirect to blogs page
       console.log("Blog created successfully:", response);
     } catch (error) {
       const errorMessage =
@@ -39,10 +42,10 @@ const CreateBlogForm = () => {
     <div className="min-h-screen bg-linear-to-br from-indigo-50 via-white to-purple-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-3 mb-4">
             <TicketPlus className="w-10 h-10 md:w-12 md:h-12 text-blue-600 shrink-0" />
-            <h1 className="text-4xl md:text-5xl font-bold bg-linear-to-r bg-clip-text text-blue-500">
+            <h1 className="text-2xl md:text-3xl font-bold bg-linear-to-r bg-clip-text text-blue-500">
               Create a New Blog
             </h1>
           </div>

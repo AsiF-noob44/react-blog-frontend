@@ -1,9 +1,17 @@
 import { Link, NavLink } from "react-router-dom";
-import { PenLine } from "lucide-react";
+import { FaBlog } from "react-icons/fa6";
 const Navbar = () => {
+  const handleNavClick = () => {
+    // Close dropdown by removing focus from the dropdown trigger
+    const elem = document.activeElement;
+    if (elem) {
+      elem?.blur();
+    }
+  };
+
   const navLinks = (
     <>
-      <li>
+      <li onClick={handleNavClick}>
         <NavLink
           to="/"
           className={({ isActive, isPending }) =>
@@ -18,7 +26,7 @@ const Navbar = () => {
         </NavLink>
       </li>
 
-      <li>
+      <li onClick={handleNavClick}>
         <NavLink
           to="/blogs"
           className={({ isActive, isPending }) =>
@@ -33,7 +41,7 @@ const Navbar = () => {
         </NavLink>
       </li>
 
-      <li>
+      <li onClick={handleNavClick}>
         <NavLink
           to="/contact"
           className={({ isActive, isPending }) =>
@@ -50,7 +58,7 @@ const Navbar = () => {
     </>
   );
   return (
-    <div className="navbar bg-base-100 shadow-sm">
+    <div className="navbar sticky top-0 z-50 bg-linear-to-r from-indigo-50 via-purple-50 to-blue-50 shadow-md border-b border-indigo-100">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -78,21 +86,18 @@ const Navbar = () => {
           </ul>
         </div>
         <Link to="/" className="flex items-center gap-2 group">
-          <PenLine
-            size={28}
-            className="text-indigo-600 stroke-2 transition-colors duration-300 group-hover:text-indigo-700"
-            fill="none"
-          />
-          <span className="text-2xl font-bold tracking-tight bg-linear-to-r from-indigo-600 via-purple-600 to-blue-600 bg-clip-text text-transparent transition-all duration-300 group-hover:from-indigo-700 group-hover:via-purple-700 group-hover:to-blue-700 italic">
-            My Blog
-          </span>
+          <div className="flex items-center gap-0.5 px-3 py-2 rounded-lg transition-all duration-300 group-hover:bg-white/60">
+            <FaBlog className="w-8 h-8 text-indigo-600 group-hover:scale-110 transition-transform duration-300" />
+            <span className="text-4xl font-bold tracking-tight bg-linear-to-r from-indigo-600 via-purple-600 to-blue-600 bg-clip-text text-transparent">
+              logIt
+            </span>
+          </div>
         </Link>
       </div>
-      <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal gap-2 px-1">{navLinks}</ul>
-      </div>
       <div className="navbar-end">
-        <a className="btn">Login</a>
+        <ul className="menu menu-horizontal gap-2 px-1 hidden lg:flex">
+          {navLinks}
+        </ul>
       </div>
     </div>
   );

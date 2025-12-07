@@ -1,10 +1,14 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 
 function App() {
+  const location = useLocation();
+  const hideFooter = location.pathname === "/create-blog";
+
   return (
-    <div>
+    <div className="min-h-screen flex flex-col">
       <Navbar />
       <Toaster
         position="top-right"
@@ -29,7 +33,10 @@ function App() {
           },
         }}
       />
-      <Outlet />
+      <div className="flex-1">
+        <Outlet />
+      </div>
+      {!hideFooter && <Footer />}
     </div>
   );
 }
