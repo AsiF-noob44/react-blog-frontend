@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, User, Calendar, Clock } from "lucide-react";
+import { ArrowLeft, User, Calendar, Clock, Edit } from "lucide-react";
 import toast from "react-hot-toast";
 import { getBlogById } from "../api/blogAPI";
 
@@ -57,14 +57,23 @@ const BlogDetails = () => {
   return (
     <div className="min-h-screen bg-base-50 p-8">
       <div className="max-w-4xl mx-auto">
-        {/* Back Button */}
-        <button
-          onClick={() => navigate("/blogs")}
-          className="btn btn-ghost gap-2 mb-6"
-        >
-          <ArrowLeft size={20} />
-          Back to Blogs
-        </button>
+        {/* Back Button and Edit Button */}
+        <div className="flex items-center justify-between mb-6">
+          <button
+            onClick={() => navigate("/blogs")}
+            className="btn btn-ghost gap-2"
+          >
+            <ArrowLeft size={20} />
+            Back to Blogs
+          </button>
+          <button
+            onClick={() => navigate(`/blogs/${id}/edit`)}
+            className="btn btn-info gap-2"
+          >
+            <Edit size={18} />
+            Edit Blog
+          </button>
+        </div>
 
         {/* Blog Content Card */}
         <div className="card bg-base-100 shadow-xl">

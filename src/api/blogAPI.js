@@ -14,3 +14,13 @@ export const getBlogById = async (id) => {
   const response = await axiosInstance.get(`/${id}`);
   return response.data;
 };
+
+export const updateBlog = async (id, blogData) => {
+  const response = await axiosInstance.put(`/${id}`, blogData);
+  return response.data;
+};
+
+export const deleteBlog = async (id) => {
+  const response = await axiosInstance.delete(`/${id}`);
+  return response.data;
+};

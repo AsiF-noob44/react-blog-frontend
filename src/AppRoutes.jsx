@@ -5,6 +5,7 @@ import Blogs from "./pages/Blogs";
 import Contact from "./pages/Contact";
 import CreateBlogForm from "./pages/CreateBlogForm";
 import BlogDetails from "./pages/BlogDetails";
+import EditBlogForm from "./pages/EditBlogForm";
 
 const AppRoutes = () => {
   return (
@@ -13,6 +14,7 @@ const AppRoutes = () => {
         <Route index element={<Home />} />
         <Route path="blogs" element={<Blogs />} />
         <Route path="blogs/:id" element={<BlogDetails />} />
+        <Route path="blogs/:id/edit" element={<EditBlogForm />} />
         <Route path="contact" element={<Contact />} />
         <Route path="create-blog" element={<CreateBlogForm />} />
       </Route>

@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { DiamondPlus, User, Calendar, Eye } from "lucide-react";
+import { DiamondPlus, User, Calendar, Eye, Trash } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { getAllBlogs } from "../api/blogAPI.js";
+import { getAllBlogs, deleteBlog } from "../api/blogAPI.js";
 
 const Blogs = () => {
   const [blogs, setBlogs] = useState([]);
@@ -24,6 +24,18 @@ const Blogs = () => {
 
     fetchBlogs();
   }, []);
+
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this blog?")) {
+      try {
+        await deleteBlog(id);
+        setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog._id !== id));
+        toast.success("Blog deleted successfully");
+      } catch (error) {
+        toast.error(error.response?.data?.error || "Failed to delete blog");
+      }
+    }
+  };
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -74,9 +86,6 @@ const Blogs = () => {
               <p className="text-base-content/70 mb-4">
                 Start creating your first blog post!
               </p>
-              <Link to="/create-blog" className="btn btn-primary">
-                Create Your First Blog
-              </Link>
             </div>
           </div>
         )}
@@ -120,6 +129,13 @@ const Blogs = () => {
                     >
                       <Eye size={16} />
                       View Details
+                    </button>
+                    <button
+                      onClick={() => handleDelete(blog?._id)}
+                      className="btn btn-outline btn-error btn-sm gap-1.5 hover:btn-error"
+                      aria-label="Delete blog"
+                    >
+                      <Trash size={16} />
                     </button>
                   </div>
                 </div>

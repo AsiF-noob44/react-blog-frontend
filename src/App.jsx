@@ -5,7 +5,8 @@ import Footer from "./components/Footer";
 
 function App() {
   const location = useLocation();
-  const hideFooter = location.pathname === "/create-blog";
+  const hideFooter =
+    location.pathname === "/create-blog" || location.pathname.includes("/edit");
 
   return (
     <div className="min-h-screen flex flex-col">
