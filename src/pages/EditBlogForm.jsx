@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { ArrowLeft, Edit } from "lucide-react";
+import { Edit } from "lucide-react";
 import toast from "react-hot-toast";
 import { getBlogById, updateBlog } from "../api/blogAPI.js";
 import { useNavigate, useParams } from "react-router-dom";
